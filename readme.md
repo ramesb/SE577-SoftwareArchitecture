@@ -2,11 +2,11 @@ Building Vue.js 3  application to do read/write operations interacting with micr
 
 ##techstack
 
-vue 3
-vue-router 4
-axios 0.21
-bootstrap
-Java
+vue 3, 
+vue-router, 
+axios 0.21, 
+bootstrap, 
+Java, 
 Springboot
 
 ##commands
