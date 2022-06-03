@@ -1,5 +1,6 @@
 package com.boot.spring.jpa.h2.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,8 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.boot.spring.jpa.h2.model.GithubRepository;
 import com.boot.spring.jpa.h2.model.Repo;
 import com.boot.spring.jpa.h2.repository.DataRepository;
+import com.boot.spring.jpa.h2.service.GithubService;
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
@@ -28,26 +31,14 @@ public class RepoController {
 
 	@Autowired
 	DataRepository dataRepository;
+	
+    @Autowired
+	private GithubService githubService;
 
-	@GetMapping("/repos")
-	public ResponseEntity<List<Repo>> getAllRepos(@RequestParam(required = false) String title) {
-		try {
-			List<Repo> repos = new ArrayList<Repo>();
-
-			if (title == null)
-				dataRepository.findAll().forEach(repos::add);
-			else
-				dataRepository.findByTitleContaining(title).forEach(repos::add);
-
-			if (repos.isEmpty()) {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-			}
-
-			return new ResponseEntity<>(repos, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+    @GetMapping("/repos")
+    public List<GithubRepository> getRepos() throws IOException {
+        return githubService.getRepositories();
+    }
 
 	@GetMapping("/repos/{id}")
 	public ResponseEntity<Repo> getRepoById(@PathVariable("id") long id) {
